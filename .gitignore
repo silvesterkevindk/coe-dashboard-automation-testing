@@ -1,0 +1,16 @@
+node_modules
+dist
+.DS_Store
+*.local
+.env
+
+# Database SQLite lokal (di-seed otomatis saat pertama run)
+server/*.db
+server/*.db-wal
+server/*.db-shm
+
+# Vercel
+.vercel
+
+# Log dev lokal
+*.log

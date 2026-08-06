@@ -1,0 +1,12 @@
+node_modules
+dist
+server/*.db
+server/*.db-wal
+server/*.db-shm
+.git
+.gitignore
+*.md
+!README.md
+Dashboard Monitoring QA.pdf
+.DS_Store
+scratchpad

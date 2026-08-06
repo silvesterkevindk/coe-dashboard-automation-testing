@@ -1,0 +1,30 @@
+services:
+  # Backend API — Express + SQLite (JWT auth)
+  api:
+    build:
+      context: .
+      dockerfile: server/Dockerfile
+    image: qa-automation-api:1.0
+    container_name: qa-automation-api
+    environment:
+      - API_PORT=4000
+      - DB_PATH=/data/qa-dashboard.db
+      # WAJIB diganti di produksi (mis. lewat file .env)
+      - JWT_SECRET=${JWT_SECRET:-ganti-secret-ini-di-produksi}
+    volumes:
+      - qa-db:/data        # database SQLite persisten
+    restart: unless-stopped
+
+  # Frontend — build React di-serve Nginx, sekaligus proxy /api ke service api
+  web:
+    build: .
+    image: qa-automation-dashboard:1.0
+    container_name: qa-automation-dashboard
+    ports:
+      - "8080:80"
+    depends_on:
+      - api
+    restart: unless-stopped
+
+volumes:
+  qa-db:
