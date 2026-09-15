@@ -69,7 +69,7 @@ function B2BCard({ r, leads, canEdit, onSetLead }) {
         <div className="w-9 h-9 shrink-0 rounded-full bg-slate-500 text-white flex items-center justify-center text-xs font-bold">{initials(r.name)}</div>
         <div className="min-w-0">
           <div className="text-xs font-bold text-bni-navy dark:text-white truncate group-hover:text-bni-orange">{r.name}</div>
-          <div className="text-[10px] text-slate-400 truncate">{r.company || '-'}</div>
+          <div className="text-[10px] text-slate-400 truncate">{r.company || '-'}{r.kontrak ? ` | ${r.kontrak}` : ''}</div>
         </div>
       </Link>
       {canEdit && (

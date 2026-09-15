@@ -15,7 +15,7 @@ const parseResource = (r) => r && ({
 
 // Kolom yang boleh ditulis per entity (whitelist)
 const PROJECT_FIELDS = ['name', 'projectId', 'applicationId', 'phase', 'platform', 'progress', 'totalTC', 'executed', 'passed', 'failed', 'blocked', 'notRun', 'automation', 'automationCoverage', 'openDefect', 'closedDefect', 'critical', 'dailyProgress', 'urlGitlab', 'urlReport', 'urlTestcaseScenario']
-const RESOURCE_FIELDS = ['name', 'npp', 'company', 'birthDate', 'joinDate', 'phone', 'role', 'jabatan', 'lead', 'projects', 'phase', 'todayTask', 'status', 'workload', 'utilization', 'progress', 'manualProgress', 'automationProgress', 'reviewProgress', 'activities', 'standup']
+const RESOURCE_FIELDS = ['name', 'npp', 'company', 'birthDate', 'joinDate', 'phone', 'role', 'jabatan', 'lead', 'kontrak', 'projects', 'phase', 'todayTask', 'status', 'workload', 'utilization', 'progress', 'manualProgress', 'automationProgress', 'reviewProgress', 'activities', 'standup']
 const ASSIGNMENT_FIELDS = ['resourceName', 'project', 'task', 'target', 'done', 'dueDate', 'status']
 const DEVICE_FIELDS = ['name', 'type', 'osVersion', 'holder', 'location', 'hasCable', 'hasCharger', 'status', 'notes', 'updatedAt']
 

@@ -69,6 +69,7 @@ async function doInit() {
       role               TEXT,
       jabatan            TEXT DEFAULT 'B2B Automation',
       lead               TEXT DEFAULT '',
+      kontrak            TEXT DEFAULT '',
       projects           TEXT DEFAULT '[]',
       phase              TEXT,
       todayTask          TEXT,
@@ -119,6 +120,7 @@ async function doInit() {
   await ensureColumn('resources', 'joinDate', 'TEXT')
   await ensureColumn('resources', 'phone', "TEXT DEFAULT ''")
   await ensureColumn('resources', 'lead', "TEXT DEFAULT ''")
+  await ensureColumn('resources', 'kontrak', "TEXT DEFAULT ''")
   await ensureColumn('projects', 'projectId', "TEXT DEFAULT ''")
   await ensureColumn('projects', 'applicationId', "TEXT DEFAULT ''")
   await ensureColumn('projects', 'urlGitlab', "TEXT DEFAULT ''")

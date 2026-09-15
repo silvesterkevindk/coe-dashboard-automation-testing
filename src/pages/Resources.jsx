@@ -11,6 +11,7 @@ const COLS = [
   { label: 'No', value: (_, i) => i + 1 },
   { label: 'NPP', value: (r) => r.npp || '-' },
   { label: 'Nama Pegawai', value: (r) => r.name },
+  { label: 'Kontrak', value: (r) => r.kontrak || '-' },
   { label: 'Perusahaan', value: (r) => r.company || '-' },
   { label: 'Tanggal Lahir', value: (r) => fmtDate(r.birthDate) },
   { label: 'Tanggal Bergabung', value: (r) => fmtDate(r.joinDate) },
@@ -21,8 +22,10 @@ const COLS = [
 
 // Form hanya data master — data operasional (project, task, status, progress,
 // standup) dikelola di menu Assignment.
+const KONTRAK_OPTIONS = ['BAU', 'Avatar', 'AutoDebet']
+
 const EMPTY_FORM = {
-  name: '', npp: '', company: '', birthDate: '', joinDate: '', phone: '',
+  name: '', npp: '', kontrak: '', company: '', birthDate: '', joinDate: '', phone: '',
   jabatan: 'B2B Automation',
 }
 
@@ -48,6 +51,13 @@ function ResourceForm({ initial, onSubmit, onClose }) {
         <div>
           <label className="label">NPP</label>
           <input className="input" value={form.npp} onChange={set('npp')} placeholder="mis. P057874" />
+        </div>
+        <div>
+          <label className="label">Kontrak</label>
+          <select className="input" value={form.kontrak || ''} onChange={set('kontrak')}>
+            <option value="">—</option>
+            {KONTRAK_OPTIONS.map((k) => <option key={k} value={k}>{k}</option>)}
+          </select>
         </div>
         <div>
           <label className="label">Perusahaan</label>
@@ -87,6 +97,16 @@ function jabatanBadge(jabatan) {
   }
 }
 
+// Warna badge tipe kontrak
+function kontrakBadge(kontrak) {
+  switch (kontrak) {
+    case 'BAU': return 'bg-emerald-50 text-emerald-700 dark:bg-emerald-500/15 dark:text-emerald-300'
+    case 'Avatar': return 'bg-sky-50 text-sky-700 dark:bg-sky-500/15 dark:text-sky-300'
+    case 'AutoDebet': return 'bg-amber-50 text-amber-700 dark:bg-amber-500/15 dark:text-amber-300'
+    default: return 'bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-300'
+  }
+}
+
 const PAGE_SIZE = 10
 
 // Ubah tanggal ISO -> angka (timestamp) untuk pembanding sort; kosong dianggap 0
@@ -97,6 +117,7 @@ const dateVal = (s) => (s ? new Date(s).getTime() : 0)
 const SORT_COLS = [
   { key: 'npp', label: 'NPP', get: (r) => (r.npp || '').toLowerCase() },
   { key: 'name', label: 'Nama Pegawai', get: (r) => (r.name || '').toLowerCase() },
+  { key: 'kontrak', label: 'Kontrak', get: (r) => (r.kontrak || '').toLowerCase() },
   { key: 'company', label: 'Perusahaan', get: (r) => (r.company || '').toLowerCase() },
   { key: 'birthDate', label: 'Tgl Lahir', get: (r) => dateVal(r.birthDate) },
   { key: 'joinDate', label: 'Tanggal Bergabung', get: (r) => dateVal(r.joinDate) },
@@ -194,6 +215,11 @@ export default function Resources() {
                       <span className={`w-2 h-2 rounded-full shrink-0 ${statusColor(r.status)}`} />
                       {r.name}
                     </Link>
+                  </td>
+                  <td className="px-4 py-3 whitespace-nowrap">
+                    {r.kontrak
+                      ? <Badge className={kontrakBadge(r.kontrak)}>{r.kontrak}</Badge>
+                      : <span className="text-slate-300">-</span>}
                   </td>
                   <td className="px-4 py-3 text-slate-600 whitespace-nowrap">{r.company || '-'}</td>
                   <td className="px-4 py-3 text-slate-600 whitespace-nowrap">{fmtDate(r.birthDate)}</td>
