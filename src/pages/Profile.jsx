@@ -2,7 +2,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../store/AuthContext.jsx'
 import { useData } from '../store/DataContext.jsx'
 import { Card, Badge, SectionTitle } from '../components/ui.jsx'
-import { fmtDate, lamaBergabung } from '../lib/format.js'
+import { fmtDate, lamaBergabung, roleLabel } from '../lib/format.js'
 
 const initials = (name = '') => name.split(' ').map((s) => s[0]).slice(0, 2).join('').toUpperCase()
 
@@ -40,7 +40,7 @@ export default function Profile() {
           <div>
             <h2 className="text-xl font-bold text-bni-navy dark:text-white">{user?.name || 'Pengguna'}</h2>
             <div className="flex items-center gap-2 mt-1">
-              <Badge className="bg-bni-orange/10 text-bni-orange">{match?.jabatan || user?.role || '-'}</Badge>
+              <Badge className="bg-bni-orange/10 text-bni-orange">{roleLabel(match?.jabatan || user?.role)}</Badge>
               <span className="text-xs text-slate-400">@{user?.username}</span>
             </div>
           </div>
@@ -56,7 +56,7 @@ export default function Profile() {
             <Row label="NPP" value={match.npp} />
             <Row label="Nama" value={match.name} />
             <Row label="Perusahaan" value={match.company} />
-            <Row label="Jabatan" value={match.jabatan} />
+            <Row label="Jabatan" value={roleLabel(match.jabatan)} />
             <Row label="Tanggal Lahir" value={fmtDate(match.birthDate)} />
             <Row label="Join Date" value={fmtDate(match.joinDate)} />
             <Row label="Lama Bergabung" value={lamaBergabung(match.joinDate)} />

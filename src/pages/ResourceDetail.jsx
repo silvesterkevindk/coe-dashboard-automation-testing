@@ -1,7 +1,7 @@
 import { useParams, Link } from 'react-router-dom'
 import { useData } from '../store/DataContext.jsx'
 import { Card, Badge, ProgressBar, SectionTitle, EmptyState } from '../components/ui.jsx'
-import { statusBadge, utilColor, fmtDate, lamaBergabung, waLink } from '../lib/format.js'
+import { statusBadge, utilColor, fmtDate, lamaBergabung, waLink, roleLabel } from '../lib/format.js'
 
 export default function ResourceDetail() {
   const { id } = useParams()
@@ -25,7 +25,7 @@ export default function ResourceDetail() {
             </div>
             <div>
               <h2 className="text-lg font-bold text-bni-navy">{r.name}</h2>
-              <p className="text-sm text-slate-400">{r.role}</p>
+              <p className="text-sm text-slate-400">{roleLabel(r.role)}</p>
               <Badge className={`${statusBadge(r.status)} mt-1`}>{r.status}</Badge>
             </div>
           </div>
@@ -45,7 +45,7 @@ export default function ResourceDetail() {
             </div>
             <div className="flex justify-between items-center gap-2">
               <dt className="text-slate-400 shrink-0">Jabatan</dt>
-              <dd><span className="text-xs bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 font-semibold px-2 py-0.5 rounded-full">{r.jabatan || 'B2B Automation'}</span></dd>
+              <dd><span className="text-xs bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 font-semibold px-2 py-0.5 rounded-full">{roleLabel(r.jabatan || 'B2B Automation')}</span></dd>
             </div>
             <div className="flex justify-between items-start gap-2">
                 <dt className="text-slate-400 shrink-0">Project</dt>

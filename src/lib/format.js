@@ -2,6 +2,14 @@
 
 export const num = (n) => (n ?? 0).toLocaleString('id-ID')
 
+// Label ringkas untuk role/jabatan (khusus TAMPILAN; nilai data tidak diubah,
+// supaya grouping Organisasi, dropdown, & hak akses tetap berfungsi).
+export const ROLE_LABEL = {
+  'Test Automation Manager': 'Test Manager',
+  'Test Automation Lead': 'Test Lead',
+}
+export const roleLabel = (role) => ROLE_LABEL[role] || role || '-'
+
 export const statusColor = (status) => ({
   Working: 'bg-emerald-500',
   Review: 'bg-amber-500',

@@ -79,7 +79,7 @@ export const seedUsers = [
 ]
 
 // Nilai jabatan (struktur organisasi COE Automation Testing)
-export const JABATAN = ['Team Leader COE', 'Test Automation Manager', 'Test Automation Lead', 'B2B Automation']
+export const JABATAN = ['Team Leader COE', 'Test Automation Manager', 'Test Automation Lead', 'B2B Automation', 'B2B Performance']
 
 // Anggota struktur organisasi di atas B2B Automation (di-ensure ada di tiap start)
 const orgMember = (id, npp, name, jabatan, company = 'BNI', birthDate = '', joinDate = '') => ({

@@ -59,7 +59,7 @@ const SECTIONS = [
     title: 'Organisasi',
     desc: 'Bagan struktur organisasi COE Automation Testing.',
     items: [
-      ['Hierarki', 'Team Leader COE → Test Automation Manager → Test Automation Lead → B2B Automation.'],
+      ['Hierarki', 'Team Leader COE → Test Manager → Test Lead → B2B Automation.'],
       ['Pengelompokan B2B', 'Anggota B2B Automation ditampilkan di bawah Lead (PIC) masing-masing; yang belum di-set masuk kelompok "Belum ditentukan".'],
     ],
   },

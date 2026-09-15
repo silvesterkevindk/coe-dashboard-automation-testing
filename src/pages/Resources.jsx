@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useData } from '../store/DataContext.jsx'
 import { Card, Badge, Modal, EmptyState } from '../components/ui.jsx'
-import { statusColor, fmtDate, lamaBergabung } from '../lib/format.js'
+import { statusColor, fmtDate, lamaBergabung, roleLabel } from '../lib/format.js'
 import { JABATAN } from '../data/seed.js'
 import { downloadCSV, downloadPDF } from '../lib/export.js'
 
@@ -16,7 +16,7 @@ const COLS = [
   { label: 'Tanggal Bergabung', value: (r) => fmtDate(r.joinDate) },
   { label: 'Lama Bergabung', value: (r) => lamaBergabung(r.joinDate) },
   { label: 'No Telepon', value: (r) => r.phone || '-' },
-  { label: 'Role', value: (r) => r.jabatan || 'B2B Automation' },
+  { label: 'Role', value: (r) => roleLabel(r.jabatan || 'B2B Automation') },
 ]
 
 // Form hanya data master — data operasional (project, task, status, progress,
@@ -68,7 +68,7 @@ function ResourceForm({ initial, onSubmit, onClose }) {
         <div className="col-span-2">
           <label className="label">Role <span className="text-slate-300 font-normal">(struktur organisasi)</span></label>
           <select className="input" value={form.jabatan} onChange={set('jabatan')}>
-            {JABATAN.map((j) => <option key={j}>{j}</option>)}
+            {JABATAN.map((j) => <option key={j} value={j}>{roleLabel(j)}</option>)}
           </select>
         </div>
       </div>
@@ -82,6 +82,7 @@ function jabatanBadge(jabatan) {
     case 'Team Leader COE': return 'bg-bni-navy/10 text-bni-navy dark:text-slate-200'
     case 'Test Automation Manager': return 'bg-bni-orange/10 text-bni-orange'
     case 'Test Automation Lead': return 'bg-bni-teal/10 text-bni-teal'
+    case 'B2B Performance': return 'bg-violet-500/10 text-violet-600 dark:text-violet-300'
     default: return 'bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-300'
   }
 }
@@ -198,7 +199,7 @@ export default function Resources() {
                   <td className="px-4 py-3 text-slate-600 whitespace-nowrap">{fmtDate(r.birthDate)}</td>
                   <td className="px-4 py-3 text-slate-600 whitespace-nowrap">{fmtDate(r.joinDate)}</td>
                   <td className="px-4 py-3 text-slate-600 whitespace-nowrap">{lamaBergabung(r.joinDate)}</td>
-                  <td className="px-4 py-3"><Badge className={jabatanBadge(r.jabatan)}>{r.jabatan || 'B2B Automation'}</Badge></td>
+                  <td className="px-4 py-3"><Badge className={jabatanBadge(r.jabatan)}>{roleLabel(r.jabatan || 'B2B Automation')}</Badge></td>
                   <td className="px-4 py-3 text-right whitespace-nowrap">
                     <button onClick={() => setModal({ mode: 'edit', resource: r })} className="text-slate-400 hover:text-bni-teal text-base mr-2" title="Edit">✏️</button>
                     <button onClick={() => { if (confirm(`Hapus ${r.name}?`)) deleteResource(r.id) }} className="text-slate-300 hover:text-red-500 text-lg" title="Hapus">🗑</button>

@@ -2,15 +2,9 @@ import { Link } from 'react-router-dom'
 import { useData } from '../store/DataContext.jsx'
 import { useAuth } from '../store/AuthContext.jsx'
 import { Card } from '../components/ui.jsx'
+import { roleLabel } from '../lib/format.js'
 
 const initials = (name = '') => name.split(' ').map((s) => s[0]).slice(0, 2).join('').toUpperCase()
-
-// Label tampilan role di kartu (data `role` aslinya tidak diubah)
-const ROLE_LABEL = {
-  'Test Automation Manager': 'Test Manager',
-  'Test Automation Lead': 'Test Lead',
-}
-const roleLabel = (role) => ROLE_LABEL[role] || role || '-'
 
 // Tier manajemen di atas Test Lead. `key` = nilai jabatan di data (untuk filter),
 // `label` = teks yang ditampilkan.
@@ -159,7 +153,8 @@ export default function Organisasi() {
   const total = resources.length
 
   const leads = byTier('Test Automation Lead')
-  const b2b = byTier('B2B Automation')
+  // Semua anggota B2B (Automation & Performance) — pengelompokan kolom ikut divisi lead-nya
+  const b2b = resources.filter((r) => (r.jabatan || 'B2B Automation').startsWith('B2B'))
   const leadsIn = (divKey) => leads.filter((l) => divisionOf(l) === divKey)
   const unassigned = b2b.filter((r) => !r.lead || !leads.some((l) => l.id === r.lead))
 

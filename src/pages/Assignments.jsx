@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useData } from '../store/DataContext.jsx'
 import { Card, Badge, ProgressBar, Modal, EmptyState } from '../components/ui.jsx'
-import { statusBadge, statusColor } from '../lib/format.js'
+import { statusBadge, statusColor, roleLabel } from '../lib/format.js'
 import { RESOURCE_STATUS as STATUSES } from '../data/seed.js'
 import { downloadCSV, downloadPDF } from '../lib/export.js'
 
@@ -231,7 +231,7 @@ export default function Assignments() {
                         <span className={`w-2 h-2 rounded-full shrink-0 ${statusColor(r.status)}`} />
                         {r.name}
                       </div>
-                      <div className="text-xs text-slate-400 ml-4">{r.jabatan}</div>
+                      <div className="text-xs text-slate-400 ml-4">{roleLabel(r.jabatan)}</div>
                     </td>
                     <td className="px-4 py-3"><ProjectBadges projects={r.projects} /></td>
                     <td className="px-4 py-3 text-slate-600">{r.todayTask || '-'}</td>

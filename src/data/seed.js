@@ -7,7 +7,7 @@ export const PLATFORMS = ['Web', 'Mobile', 'API', 'Desktop']
 export const RESOURCE_STATUS = ['Working', 'Review', 'Blocked', 'Leave', 'Meeting', 'Idle']
 export const ASSIGNMENT_STATUS = ['On Track', 'At Risk', 'Delayed', 'Done']
 // Jabatan — struktur organisasi COE Automation Testing (urut dari atas ke bawah)
-export const JABATAN = ['Team Leader COE', 'Test Automation Manager', 'Test Automation Lead', 'B2B Automation']
+export const JABATAN = ['Team Leader COE', 'Test Automation Manager', 'Test Automation Lead', 'B2B Automation', 'B2B Performance']
 
 export const seedProjects = [
   {
