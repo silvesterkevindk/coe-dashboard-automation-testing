@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { Projects, Resources, Assignments, Meta } from '../repo.js'
+import { Projects, Resources, Assignments, Devices, Meta } from '../repo.js'
 import { requireAuth } from '../auth.js'
 
 const router = Router()
@@ -10,10 +10,10 @@ const wrap = (fn) => (req, res, next) => Promise.resolve(fn(req, res, next)).cat
 
 // Bootstrap — sekali fetch untuk mengisi seluruh dashboard
 router.get('/bootstrap', wrap(async (req, res) => {
-  const [projects, resources, assignments, execution, heatmap] = await Promise.all([
-    Projects.all(), Resources.all(), Assignments.all(), Meta.get('execution'), Meta.get('heatmap'),
+  const [projects, resources, assignments, devices, execution, heatmap] = await Promise.all([
+    Projects.all(), Resources.all(), Assignments.all(), Devices.all(), Meta.get('execution'), Meta.get('heatmap'),
   ])
-  res.json({ projects, resources, assignments, execution, heatmap })
+  res.json({ projects, resources, assignments, devices, execution, heatmap })
 }))
 
 // Helper: pasang rute CRUD standar untuk sebuah entity
@@ -44,5 +44,6 @@ function crud(path, Repo, label) {
 crud('/projects', Projects, 'Project')
 crud('/resources', Resources, 'Resource')
 crud('/assignments', Assignments, 'Assignment')
+crud('/devices', Devices, 'Device')
 
 export default router

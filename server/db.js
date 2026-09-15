@@ -3,7 +3,7 @@ import bcrypt from 'bcryptjs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import {
-  seedProjects, seedResources, seedAssignments, seedExecution, seedHeatmap, seedUsers, seedOrgMembers,
+  seedProjects, seedResources, seedAssignments, seedExecution, seedHeatmap, seedUsers, seedOrgMembers, seedDevices,
 } from './seed.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
@@ -92,6 +92,19 @@ async function doInit() {
       dueDate      TEXT,
       status       TEXT
     );
+    CREATE TABLE IF NOT EXISTS devices (
+      id         TEXT PRIMARY KEY,
+      name       TEXT NOT NULL,
+      type       TEXT DEFAULT 'Android',
+      osVersion  TEXT DEFAULT '',
+      holder     TEXT DEFAULT '',
+      location   TEXT DEFAULT '',
+      hasCable   INTEGER DEFAULT 0,
+      hasCharger INTEGER DEFAULT 0,
+      status     TEXT DEFAULT 'Available',
+      notes      TEXT DEFAULT '',
+      updatedAt  TEXT DEFAULT ''
+    );
     CREATE TABLE IF NOT EXISTS meta (
       key   TEXT PRIMARY KEY,
       value TEXT
@@ -111,6 +124,7 @@ async function doInit() {
   await ensureColumn('projects', 'urlGitlab', "TEXT DEFAULT ''")
   await ensureColumn('projects', 'urlReport', "TEXT DEFAULT ''")
   await ensureColumn('projects', 'urlTestcaseScenario', "TEXT DEFAULT ''")
+  await ensureColumn('devices', 'osVersion', "TEXT DEFAULT ''")
 
   await seedAll()
 }
@@ -160,6 +174,19 @@ async function insertAssignment(a) {
   })
 }
 
+async function insertDevice(d) {
+  await db.execute({
+    sql: `INSERT OR IGNORE INTO devices
+      (id,name,type,osVersion,holder,location,hasCable,hasCharger,status,notes,updatedAt)
+      VALUES (:id,:name,:type,:osVersion,:holder,:location,:hasCable,:hasCharger,:status,:notes,:updatedAt)`,
+    args: {
+      osVersion: '', holder: '', location: '', hasCable: 0, hasCharger: 0,
+      status: 'Available', notes: '', updatedAt: '',
+      ...d,
+    },
+  })
+}
+
 async function seedAll() {
   const now = new Date().toISOString()
   for (const u of seedUsers) {
@@ -171,6 +198,7 @@ async function seedAll() {
   for (const p of seedProjects) await insertProject(p)
   for (const r of [...seedResources, ...seedOrgMembers]) await insertResource(r)
   for (const a of seedAssignments) await insertAssignment(a)
+  for (const d of seedDevices) await insertDevice(d)
 
   await db.execute({ sql: 'INSERT OR IGNORE INTO meta (key,value) VALUES (:k,:v)', args: { k: 'execution', v: JSON.stringify(seedExecution) } })
   await db.execute({ sql: 'INSERT OR IGNORE INTO meta (key,value) VALUES (:k,:v)', args: { k: 'heatmap', v: JSON.stringify(seedHeatmap) } })

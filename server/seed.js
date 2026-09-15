@@ -94,3 +94,27 @@ export const seedOrgMembers = [
   orgMember('res-lead-2', 'P063945', 'Thomas Gunawan Sardjono', 'Test Automation Lead', 'BNI', '1997-07-01', '2023-03-01'),
   orgMember('res-lead-3', 'P062927', 'Marinda Ika Dewi Sakariana', 'Test Automation Lead', 'BNI', '1998-04-23', '2022-05-24'),
 ]
+
+// ---- Inventaris Device Testing COE (dari sheet "Device Testing COE") ----
+// Posisi (holder/location/status) mengikuti kolom "Ditangan" terakhir: 15/09/2026.
+// Locker = tersimpan di locker (Available); nama orang = sedang dipinjam.
+const SHEET_DATE = '2026-09-15T00:00:00.000Z'
+const dev = (id, name, type, osVersion, holder, location, hasCable, status, notes = '') => ({
+  id, name, type, osVersion, holder, location, hasCable, hasCharger: 0, status, notes, updatedAt: SHEET_DATE,
+})
+
+export const seedDevices = [
+  dev('dev-1',  'OPPO A-series',        'Android', 'Android 11',   '',            'Locker', 0, 'Available', 'Kabel belum dipastikan (?)'),
+  dev('dev-2',  'Samsung A525',         'Android', 'Android 11',   'Mas Reza',    '',       1, 'Dipinjam',  'Kabel warna putih'),
+  dev('dev-3',  'Mi Note 10',           'Android', 'Android 9',    '',            'Locker', 0, 'Available', 'Layar geter; kabel belum dipastikan (?)'),
+  dev('dev-4',  'iPhone SE',            'iOS',     'iOS 14.7.1',   '',            'Locker', 1, 'Available', 'Kabel warna putih'),
+  dev('dev-5',  'iPhone 12',            'iOS',     'iOS 17 Beta',  'Mas Kevin',   '',       1, 'Dipinjam',  'Kabel warna putih'),
+  dev('dev-6',  'Samsung S20',          'Android', 'Android 10',   '',            '',       0, 'Available', 'Posisi terakhir belum dipastikan (?); kabel belum dipastikan (?)'),
+  dev('dev-7',  'OPPO Reno7',           'Android', 'Android 13',   'Bu Era',      '',       0, 'Dipinjam',  'Dipinjam sejak 10/09/2026; kabel belum dipastikan (?)'),
+  dev('dev-8',  'Samsung A53',          'Android', 'Android 12',   'Mba Kiki',    '',       0, 'Dipinjam',  'Kabel belum dipastikan (?)'),
+  dev('dev-9',  'Redmi Note 10 Pro',    'Android', 'Android 12',   'Mba Deby',    '',       0, 'Dipinjam',  'Kabel belum dipastikan (?)'),
+  dev('dev-10', 'Samsung Note 20',      'Android', 'Android 12',   'Mas Zharfan', '',       1, 'Dipinjam',  'Kabel warna hitam'),
+  dev('dev-11', 'Mi 11 Lite',           'Android', 'Android 12',   'Mas Thomas',  '',       0, 'Dipinjam',  'Kabel belum dipastikan (?)'),
+  dev('dev-12', 'Samsung Note 20 (Buk Era)', 'Android', '',        'Mas Samuel',  '',       0, 'Dipinjam',  ''),
+  dev('dev-13', 'iPhone 15',            'iOS',     '',             'Mas Mbincar', '',       0, 'Dipinjam',  ''),
+]

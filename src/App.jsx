@@ -17,6 +17,7 @@ import Execution from './pages/Execution.jsx'
 import Heatmap from './pages/Heatmap.jsx'
 import Standup from './pages/Standup.jsx'
 import Executive from './pages/Executive.jsx'
+import Device from './pages/Device.jsx'
 
 function Loader({ label = 'Memuat…' }) {
   return (
@@ -60,6 +61,7 @@ function AppRoutes() {
       <Route path="/heatmap" element={<Heatmap />} />
       <Route path="/standup" element={<Standup />} />
       <Route path="/executive" element={<Executive />} />
+      <Route path="/device" element={<Device />} />
     </Routes>
   )
 }
