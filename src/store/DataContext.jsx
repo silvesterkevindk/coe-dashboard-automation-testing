@@ -4,7 +4,7 @@ import { useAuth } from './AuthContext.jsx'
 
 const DataContext = createContext(null)
 
-const EMPTY = { projects: [], resources: [], assignments: [], execution: null, heatmap: [] }
+const EMPTY = { projects: [], resources: [], assignments: [], devices: [], execution: null, heatmap: [] }
 
 export function DataProvider({ children }) {
   const { isAuthenticated } = useAuth()
@@ -25,6 +25,7 @@ export function DataProvider({ children }) {
         projects: data.projects || [],
         resources: data.resources || [],
         assignments: data.assignments || [],
+        devices: data.devices || [],
         execution: data.execution || null,
         heatmap: data.heatmap || [],
       })
@@ -88,6 +89,22 @@ export function DataProvider({ children }) {
     async deleteAssignment(id) {
       await api.del(`/assignments/${id}`)
       setState((s) => ({ ...s, assignments: s.assignments.filter((a) => a.id !== id) }))
+    },
+
+    // ----- Devices -----
+    async addDevice(data) {
+      const created = await api.post('/devices', data)
+      setState((s) => ({ ...s, devices: [...s.devices, created] }))
+      return created
+    },
+    async updateDevice(id, patch) {
+      const updated = await api.put(`/devices/${id}`, patch)
+      setState((s) => ({ ...s, devices: s.devices.map((d) => (d.id === id ? updated : d)) }))
+      return updated
+    },
+    async deleteDevice(id) {
+      await api.del(`/devices/${id}`)
+      setState((s) => ({ ...s, devices: s.devices.filter((d) => d.id !== id) }))
     },
 
     // Muat ulang dari server

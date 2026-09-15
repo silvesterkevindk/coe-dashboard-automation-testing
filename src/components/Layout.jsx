@@ -16,6 +16,7 @@ const NAV = [
   { to: '/heatmap', label: 'Heatmap', icon: '🔥' },
   { to: '/standup', label: 'Daily Standup', icon: '🗒️' },
   { to: '/executive', label: 'Executive', icon: '🏛️' },
+  { to: '/device', label: 'Device', icon: '📱' },
   { to: '/panduan', label: 'Panduan', icon: '📖' },
 ]
 

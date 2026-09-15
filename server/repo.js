@@ -17,6 +17,7 @@ const parseResource = (r) => r && ({
 const PROJECT_FIELDS = ['name', 'projectId', 'applicationId', 'phase', 'platform', 'progress', 'totalTC', 'executed', 'passed', 'failed', 'blocked', 'notRun', 'automation', 'automationCoverage', 'openDefect', 'closedDefect', 'critical', 'dailyProgress', 'urlGitlab', 'urlReport', 'urlTestcaseScenario']
 const RESOURCE_FIELDS = ['name', 'npp', 'company', 'birthDate', 'joinDate', 'phone', 'role', 'jabatan', 'lead', 'projects', 'phase', 'todayTask', 'status', 'workload', 'utilization', 'progress', 'manualProgress', 'automationProgress', 'reviewProgress', 'activities', 'standup']
 const ASSIGNMENT_FIELDS = ['resourceName', 'project', 'task', 'target', 'done', 'dueDate', 'status']
+const DEVICE_FIELDS = ['name', 'type', 'osVersion', 'holder', 'location', 'hasCable', 'hasCharger', 'status', 'notes', 'updatedAt']
 
 const JSON_FIELDS = new Set(['dailyProgress', 'projects', 'activities', 'standup'])
 const encode = (field, val) => {
@@ -111,6 +112,27 @@ export const Assignments = {
   },
   async update(id, patch) { await updateRow('assignments', id, ASSIGNMENT_FIELDS, patch); return this.get(id) },
   async remove(id) { return (await db.execute({ sql: 'DELETE FROM assignments WHERE id = :id', args: { id } })).rowsAffected > 0 },
+}
+
+// ---------------------------------------------------------------------------
+// DEVICES (inventaris perangkat uji — bisa diinput sendiri)
+// ---------------------------------------------------------------------------
+export const Devices = {
+  async all() { return await many('SELECT * FROM devices ORDER BY rowid') },
+  async get(id) { return await one('SELECT * FROM devices WHERE id = :id', { id }) },
+  async create(data) {
+    const defaults = {
+      type: 'Android', status: 'Available', hasCable: 0, hasCharger: 0,
+      osVersion: '', holder: '', location: '', notes: '',
+    }
+    const id = await insertRow('devices', 'dev', DEVICE_FIELDS, { ...data, updatedAt: new Date().toISOString() }, defaults)
+    return this.get(id)
+  },
+  async update(id, patch) {
+    await updateRow('devices', id, DEVICE_FIELDS, { ...patch, updatedAt: new Date().toISOString() })
+    return this.get(id)
+  },
+  async remove(id) { return (await db.execute({ sql: 'DELETE FROM devices WHERE id = :id', args: { id } })).rowsAffected > 0 },
 }
 
 // ---------------------------------------------------------------------------
