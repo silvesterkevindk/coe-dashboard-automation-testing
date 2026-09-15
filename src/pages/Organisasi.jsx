@@ -97,7 +97,9 @@ function LeadColumn({ title, count, dashed, children }) {
 export default function Organisasi() {
   const { resources, updateResource } = useData()
   const { user } = useAuth()
-  const canEdit = user?.username === 'silvester'
+  // Role kepemimpinan yang boleh mengatur PIC anggota B2B (Lead & di atasnya)
+  const EDIT_ROLES = ['QA Automation Lead', 'Team Leader COE', 'Test Automation Manager', 'Test Automation Lead']
+  const canEdit = EDIT_ROLES.includes(user?.role)
 
   const byTier = (key) => resources.filter((r) => (r.jabatan || 'B2B Automation') === key)
   const total = resources.length
@@ -120,7 +122,7 @@ export default function Organisasi() {
 
       {canEdit && (
         <div className="text-xs text-bni-teal bg-bni-teal/10 rounded-lg px-3 py-2">
-          🛠️ Sebagai <b>silvester</b>, Anda dapat mengatur PIC tiap anggota B2B Automation lewat dropdown <b>Lead</b> di masing-masing kartu.
+          🛠️ Sebagai <b>{user?.role || 'Lead'}</b>, Anda dapat mengatur PIC tiap anggota B2B Automation lewat dropdown <b>Lead</b> di masing-masing kartu.
         </div>
       )}
 

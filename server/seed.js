@@ -74,6 +74,8 @@ export const seedUsers = [
   { username: 'bachrul', password: 'P@ssw0rd', name: 'Bachrul A.N.', role: 'Team Leader COE' },
   { username: 'marinda', password: 'P@ssw0rd', name: 'Marinda Ika Dewi Sakariana', role: 'Test Automation Lead' },
   { username: 'thomas', password: 'P@ssw0rd', name: 'Thomas Gunawan Sardjono', role: 'Test Automation Lead' },
+  { username: 'dio', password: 'P@ssw0rd', name: 'Dio Setiawan', role: 'Test Automation Lead' },
+  { username: 'putri', password: 'P@ssw0rd', name: 'Putri Puspita Purwiranda', role: 'Test Automation Lead' },
 ]
 
 // Nilai jabatan (struktur organisasi COE Automation Testing)
