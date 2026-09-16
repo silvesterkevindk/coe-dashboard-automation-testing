@@ -6,7 +6,13 @@ import { useAuth } from '../store/AuthContext.jsx'
 const initials = (name = '') => name.split(' ').map((s) => s[0]).slice(0, 2).join('').toUpperCase()
 
 const NAV = [
-  { to: '/', label: 'Dashboard', icon: '📊', end: true },
+  {
+    to: '/', label: 'Dashboard', icon: '📊', end: true,
+    children: [
+      { to: '/dashboard/automation', label: 'Automation' },
+      { to: '/dashboard/performance', label: 'Performance' },
+    ],
+  },
   { to: '/resources', label: 'Resource', icon: '👥' },
   { to: '/organisasi', label: 'Organisasi', icon: '🏢' },
   { to: '/projects', label: 'Project', icon: '📁' },
@@ -44,21 +50,38 @@ export default function Layout({ children }) {
         </div>
         <nav className="flex-1 py-3 overflow-y-auto">
           {NAV.map((n) => (
-            <NavLink
-              key={n.to}
-              to={n.to}
-              end={n.end}
-              className={({ isActive }) =>
-                `flex items-center gap-3 px-5 py-2.5 text-sm font-medium transition-colors ${
-                  isActive
-                    ? 'bg-bni-orange/10 dark:bg-bni-orange/15 text-bni-orange dark:text-white border-r-2 border-bni-orange'
-                    : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-white/5 hover:text-bni-navy dark:hover:text-white'
-                }`
-              }
-            >
-              <span className="text-base">{n.icon}</span>
-              {n.label}
-            </NavLink>
+            <div key={n.to}>
+              <NavLink
+                to={n.to}
+                end={n.end}
+                className={({ isActive }) =>
+                  `flex items-center gap-3 px-5 py-2.5 text-sm font-medium transition-colors ${
+                    isActive
+                      ? 'bg-bni-orange/10 dark:bg-bni-orange/15 text-bni-orange dark:text-white border-r-2 border-bni-orange'
+                      : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-white/5 hover:text-bni-navy dark:hover:text-white'
+                  }`
+                }
+              >
+                <span className="text-base">{n.icon}</span>
+                {n.label}
+              </NavLink>
+              {n.children?.map((c) => (
+                <NavLink
+                  key={c.to}
+                  to={c.to}
+                  className={({ isActive }) =>
+                    `flex items-center gap-2 pl-14 pr-5 py-2 text-[13px] font-medium transition-colors ${
+                      isActive
+                        ? 'bg-bni-orange/10 dark:bg-bni-orange/15 text-bni-orange dark:text-white border-r-2 border-bni-orange'
+                        : 'text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-white/5 hover:text-bni-navy dark:hover:text-white'
+                    }`
+                  }
+                >
+                  <span className="text-slate-300 dark:text-slate-500">•</span>
+                  {c.label}
+                </NavLink>
+              ))}
+            </div>
           ))}
         </nav>
 

@@ -48,6 +48,8 @@ function AppRoutes() {
   return (
     <Routes>
       <Route path="/" element={<Dashboard />} />
+      <Route path="/dashboard/automation" element={<Dashboard />} />
+      <Route path="/dashboard/performance" element={<Dashboard />} />
       <Route path="/resources" element={<Resources />} />
       <Route path="/resources/:id" element={<ResourceDetail />} />
       <Route path="/organisasi" element={<Organisasi />} />

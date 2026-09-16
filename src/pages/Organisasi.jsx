@@ -3,6 +3,7 @@ import { useData } from '../store/DataContext.jsx'
 import { useAuth } from '../store/AuthContext.jsx'
 import { Card } from '../components/ui.jsx'
 import { roleLabel } from '../lib/format.js'
+import { divisionOf } from '../lib/division.js'
 
 const initials = (name = '') => name.split(' ').map((s) => s[0]).slice(0, 2).join('').toUpperCase()
 
@@ -19,16 +20,6 @@ const DIVISIONS = [
   { key: 'Performance', label: 'Performance', avatar: 'bg-violet-500', chip: 'bg-violet-500/10 text-violet-600 dark:text-violet-300', ring: 'border-violet-400/40' },
 ]
 
-// Pemetaan Lead → Divisi (pakai field `division` bila ada, jika tidak fallback ke id).
-// Lead baru yang belum terdaftar di sini otomatis masuk "Automation".
-const LEAD_DIVISION = {
-  'res-lead-1': 'Automation',  // Mbincar Rukun Sembiring
-  'res-lead-2': 'Automation',  // Thomas Gunawan Sardjono
-  'res-lead-3': 'Automation',  // Marinda Ika Dewi Sakariana
-  'res-lead-4': 'Performance', // Dio Setiawan
-  'res-lead-5': 'Performance', // Putri Puspita Purwiranda
-}
-const divisionOf = (r) => r.division || LEAD_DIVISION[r.id] || 'Automation'
 
 function PersonCard({ r, avatar }) {
   const projectCount = (r.projects || []).length
