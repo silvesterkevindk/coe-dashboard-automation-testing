@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { useState, useEffect } from 'react'
+import { Link, useLocation } from 'react-router-dom'
 import { useData } from '../store/DataContext.jsx'
 import { useFilter } from '../store/FilterContext.jsx'
 import { Card, Badge, ProgressBar, Modal, EmptyState } from '../components/ui.jsx'
@@ -10,6 +10,16 @@ import { downloadCSV, downloadPDF } from '../lib/export.js'
 
 const riskBadge = { red: 'bg-red-50 text-red-700', amber: 'bg-amber-50 text-amber-700', green: 'bg-emerald-50 text-emerald-700' }
 const riskLabel = { red: 'High Risk', amber: 'Medium', green: 'Healthy' }
+
+// Filter divisi/kontrak berdasarkan route sub-menu Project
+const PROJECT_VIEW = {
+  '/projects/automation': { division: 'Automation' },
+  '/projects/performance': { division: 'Performance' },
+  '/projects/performance/bau': { division: 'Performance', kontrak: 'BAU' },
+  '/projects/performance/avatar': { division: 'Performance', kontrak: 'Avatar' },
+}
+
+const PAGE_SIZE = 12
 
 const COLS = [
   { label: 'No', value: (_, i) => i + 1 },
@@ -128,15 +138,27 @@ function ProjectForm({ initial, onSubmit, onClose }) {
 export default function Projects() {
   const { projects, addProject, updateProject, deleteProject } = useData()
   const { filters } = useFilter()
+  const { pathname } = useLocation()
   const [modal, setModal] = useState(null) // null | { mode: 'add' } | { mode: 'edit', project }
   const [q, setQ] = useState('') // pencarian nama project
+  const [page, setPage] = useState(1)
+
+  const view = PROJECT_VIEW[pathname] || {} // filter divisi/kontrak dari sub-menu
+  useEffect(() => { setPage(1) }, [pathname, q]) // reset halaman saat pindah sub-menu/cari
 
   const filtered = projects.filter((p) =>
     (!q || p.name.toLowerCase().includes(q.toLowerCase())) &&
     (!filters.project || p.name === filters.project) &&
     (!filters.phase || p.phase === filters.phase) &&
-    (!filters.platform || p.platform === filters.platform)
+    (!filters.platform || p.platform === filters.platform) &&
+    (!view.division || (p.division || 'Automation') === view.division) &&
+    (!view.kontrak || p.kontrak === view.kontrak)
   )
+
+  const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE))
+  const currentPage = Math.min(page, totalPages)
+  const start = (currentPage - 1) * PAGE_SIZE
+  const pageRows = filtered.slice(start, start + PAGE_SIZE)
 
   const handleSubmit = (form) => {
     if (modal?.mode === 'edit') {
@@ -159,7 +181,7 @@ export default function Projects() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {filtered.map((p) => {
+        {pageRows.map((p) => {
           const risk = projectRisk(p)
           return (
             <Card key={p.id} className="hover:shadow-card-hover transition-shadow">
@@ -198,6 +220,20 @@ export default function Projects() {
         })}
       </div>
       {filtered.length === 0 && <EmptyState>Tidak ada project yang cocok dengan filter.</EmptyState>}
+
+      {/* Pagination */}
+      {filtered.length > PAGE_SIZE && (
+        <div className="flex flex-wrap items-center justify-between gap-3 text-sm">
+          <span className="text-slate-500 dark:text-slate-400">
+            Menampilkan <b className="text-slate-700 dark:text-slate-200">{start + 1}–{Math.min(start + PAGE_SIZE, filtered.length)}</b> dari <b className="text-slate-700 dark:text-slate-200">{filtered.length}</b> project
+          </span>
+          <div className="flex items-center gap-1">
+            <button className="btn-ghost px-3 py-1.5 disabled:opacity-40 disabled:cursor-not-allowed" onClick={() => setPage((p) => Math.max(1, p - 1))} disabled={currentPage <= 1}>← Prev</button>
+            <span className="px-3 text-slate-500 dark:text-slate-400">Hal <b className="text-slate-700 dark:text-slate-200">{currentPage}</b> / {totalPages}</span>
+            <button className="btn-ghost px-3 py-1.5 disabled:opacity-40 disabled:cursor-not-allowed" onClick={() => setPage((p) => Math.min(totalPages, p + 1))} disabled={currentPage >= totalPages}>Next →</button>
+          </div>
+        </div>
+      )}
 
       {modal && (
         <ProjectForm

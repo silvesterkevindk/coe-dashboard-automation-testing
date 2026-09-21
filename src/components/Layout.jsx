@@ -13,9 +13,28 @@ const NAV = [
       { to: '/dashboard/performance', label: 'Performance' },
     ],
   },
+  {
+    to: '/kanban', label: 'Kanban', icon: '🗂️', end: true,
+    children: [
+      { to: '/kanban/automation', label: 'Automation' },
+      { to: '/kanban/performance', label: 'Performance' },
+    ],
+  },
   { to: '/resources', label: 'Resource', icon: '👥' },
   { to: '/organisasi', label: 'Organisasi', icon: '🏢' },
-  { to: '/projects', label: 'Project', icon: '📁' },
+  {
+    to: '/projects', label: 'Project', icon: '📁', end: true,
+    children: [
+      { to: '/projects/automation', label: 'Automation' },
+      {
+        to: '/projects/performance', label: 'Performance', end: true,
+        children: [
+          { to: '/projects/performance/bau', label: 'BAU' },
+          { to: '/projects/performance/avatar', label: 'Avatar' },
+        ],
+      },
+    ],
+  },
   { to: '/assignments', label: 'Assignment', icon: '📋' },
   { to: '/automation', label: 'Automation', icon: '🤖' },
   { to: '/execution', label: 'Execution', icon: '✅' },
@@ -35,7 +54,11 @@ export default function Layout({ children }) {
   const { theme, setTheme } = useTheme()
   const { user, logout } = useAuth()
   const loc = useLocation()
-  const current = NAV.find((n) => (n.end ? loc.pathname === n.to : loc.pathname.startsWith(n.to) && n.to !== '/'))
+  const current = NAV.find((n) =>
+    loc.pathname === n.to
+    || loc.pathname.startsWith(n.to + '/')
+    || (n.children && n.children.some((c) => loc.pathname.startsWith(c.to)))
+  )
 
   return (
     <div className="min-h-screen flex bg-slate-50">
@@ -49,7 +72,14 @@ export default function Layout({ children }) {
           </div>
         </div>
         <nav className="flex-1 py-3 overflow-y-auto">
-          {NAV.map((n) => (
+          {NAV.map((n) => {
+            // Sub-menu hanya terbuka saat kita sedang berada di section-nya.
+            // Klik Dashboard -> pindah ke "/" -> sub-menu muncul; klik menu lain -> tertutup.
+            const childrenOpen = n.children && (
+              (n.end ? loc.pathname === n.to : loc.pathname.startsWith(n.to)) ||
+              n.children.some((c) => loc.pathname.startsWith(c.to))
+            )
+            return (
             <div key={n.to}>
               <NavLink
                 to={n.to}
@@ -63,26 +93,51 @@ export default function Layout({ children }) {
                 }
               >
                 <span className="text-base">{n.icon}</span>
-                {n.label}
+                <span className="flex-1">{n.label}</span>
+                {n.children && <span className="text-[10px] opacity-60">{childrenOpen ? '▾' : '▸'}</span>}
               </NavLink>
-              {n.children?.map((c) => (
-                <NavLink
-                  key={c.to}
-                  to={c.to}
-                  className={({ isActive }) =>
-                    `flex items-center gap-2 pl-14 pr-5 py-2 text-[13px] font-medium transition-colors ${
-                      isActive
-                        ? 'bg-bni-orange/10 dark:bg-bni-orange/15 text-bni-orange dark:text-white border-r-2 border-bni-orange'
-                        : 'text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-white/5 hover:text-bni-navy dark:hover:text-white'
-                    }`
-                  }
-                >
-                  <span className="text-slate-300 dark:text-slate-500">•</span>
-                  {c.label}
-                </NavLink>
-              ))}
+              {childrenOpen && n.children.map((c) => {
+                const grandOpen = c.children && (
+                  loc.pathname === c.to || loc.pathname.startsWith(c.to + '/')
+                  || c.children.some((g) => loc.pathname.startsWith(g.to))
+                )
+                return (
+                <div key={c.to}>
+                  <NavLink
+                    to={c.to}
+                    end={c.end}
+                    className={({ isActive }) =>
+                      `flex items-center gap-2 pl-14 pr-5 py-2 text-[13px] font-medium transition-colors ${
+                        isActive
+                          ? 'bg-bni-orange/10 dark:bg-bni-orange/15 text-bni-orange dark:text-white border-r-2 border-bni-orange'
+                          : 'text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-white/5 hover:text-bni-navy dark:hover:text-white'
+                      }`
+                    }
+                  >
+                    <span className="text-slate-300 dark:text-slate-500">•</span>
+                    <span className="flex-1">{c.label}</span>
+                    {c.children && <span className="text-[10px] opacity-60">{grandOpen ? '▾' : '▸'}</span>}
+                  </NavLink>
+                  {grandOpen && c.children.map((g) => (
+                    <NavLink
+                      key={g.to}
+                      to={g.to}
+                      className={({ isActive }) =>
+                        `flex items-center gap-2 pl-20 pr-5 py-1.5 text-xs font-medium transition-colors ${
+                          isActive
+                            ? 'bg-bni-orange/10 dark:bg-bni-orange/15 text-bni-orange dark:text-white border-r-2 border-bni-orange'
+                            : 'text-slate-400 dark:text-slate-500 hover:bg-slate-100 dark:hover:bg-white/5 hover:text-bni-navy dark:hover:text-white'
+                        }`
+                      }
+                    >
+                      <span className="text-slate-300 dark:text-slate-600">◦</span>
+                      {g.label}
+                    </NavLink>
+                  ))}
+                </div>
+              )})}
             </div>
-          ))}
+          )})}
         </nav>
 
         {/* Theme switcher — Light / Dark */}
@@ -120,7 +175,7 @@ export default function Layout({ children }) {
       </aside>
 
       {/* Main */}
-      <div className="flex-1 ml-60 flex flex-col min-h-screen">
+      <div className="flex-1 min-w-0 ml-60 flex flex-col min-h-screen">
         <header className="bg-white border-b border-slate-200 px-6 py-3 flex items-center justify-between sticky top-0 z-30">
           <div>
             <h1 className="text-lg font-bold text-bni-navy">{current?.label || (loc.pathname === '/profile' ? 'Profil' : 'Dashboard')}</h1>
@@ -140,7 +195,7 @@ export default function Layout({ children }) {
             </button>
           </div>
         </header>
-        <main className="flex-1 p-6">{children}</main>
+        <main className="flex-1 min-w-0 p-6">{children}</main>
         <footer className="px-6 py-3 text-center text-[11px] text-slate-400 border-t border-slate-100">
           COE Automation Testing Dashboard · BNI · @SKDK
         </footer>

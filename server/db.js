@@ -56,7 +56,10 @@ async function doInit() {
       applicationId      TEXT DEFAULT '',
       urlGitlab          TEXT DEFAULT '',
       urlReport          TEXT DEFAULT '',
-      urlTestcaseScenario TEXT DEFAULT ''
+      urlTestcaseScenario TEXT DEFAULT '',
+      division           TEXT DEFAULT '',
+      kontrak            TEXT DEFAULT '',
+      stage              TEXT DEFAULT ''
     );
     CREATE TABLE IF NOT EXISTS resources (
       id                 TEXT PRIMARY KEY,
@@ -70,6 +73,7 @@ async function doInit() {
       jabatan            TEXT DEFAULT 'B2B Automation',
       lead               TEXT DEFAULT '',
       kontrak            TEXT DEFAULT '',
+      stage              TEXT DEFAULT '',
       projects           TEXT DEFAULT '[]',
       phase              TEXT,
       todayTask          TEXT,
@@ -121,11 +125,15 @@ async function doInit() {
   await ensureColumn('resources', 'phone', "TEXT DEFAULT ''")
   await ensureColumn('resources', 'lead', "TEXT DEFAULT ''")
   await ensureColumn('resources', 'kontrak', "TEXT DEFAULT ''")
+  await ensureColumn('resources', 'stage', "TEXT DEFAULT ''")
   await ensureColumn('projects', 'projectId', "TEXT DEFAULT ''")
   await ensureColumn('projects', 'applicationId', "TEXT DEFAULT ''")
   await ensureColumn('projects', 'urlGitlab', "TEXT DEFAULT ''")
   await ensureColumn('projects', 'urlReport', "TEXT DEFAULT ''")
   await ensureColumn('projects', 'urlTestcaseScenario', "TEXT DEFAULT ''")
+  await ensureColumn('projects', 'division', "TEXT DEFAULT ''")
+  await ensureColumn('projects', 'kontrak', "TEXT DEFAULT ''")
+  await ensureColumn('projects', 'stage', "TEXT DEFAULT ''")
   await ensureColumn('devices', 'osVersion', "TEXT DEFAULT ''")
 
   await seedAll()

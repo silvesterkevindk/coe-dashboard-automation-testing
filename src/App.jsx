@@ -4,6 +4,7 @@ import { useData } from './store/DataContext.jsx'
 import Login from './pages/Login.jsx'
 import Layout from './components/Layout.jsx'
 import Dashboard from './pages/Dashboard.jsx'
+import Kanban from './pages/Kanban.jsx'
 import Resources from './pages/Resources.jsx'
 import ResourceDetail from './pages/ResourceDetail.jsx'
 import Organisasi from './pages/Organisasi.jsx'
@@ -50,12 +51,19 @@ function AppRoutes() {
       <Route path="/" element={<Dashboard />} />
       <Route path="/dashboard/automation" element={<Dashboard />} />
       <Route path="/dashboard/performance" element={<Dashboard />} />
+      <Route path="/kanban" element={<Kanban />} />
+      <Route path="/kanban/automation" element={<Kanban />} />
+      <Route path="/kanban/performance" element={<Kanban />} />
       <Route path="/resources" element={<Resources />} />
       <Route path="/resources/:id" element={<ResourceDetail />} />
       <Route path="/organisasi" element={<Organisasi />} />
       <Route path="/profile" element={<Profile />} />
       <Route path="/panduan" element={<Panduan />} />
       <Route path="/projects" element={<Projects />} />
+      <Route path="/projects/automation" element={<Projects />} />
+      <Route path="/projects/performance" element={<Projects />} />
+      <Route path="/projects/performance/bau" element={<Projects />} />
+      <Route path="/projects/performance/avatar" element={<Projects />} />
       <Route path="/projects/:id" element={<ProjectDetail />} />
       <Route path="/assignments" element={<Assignments />} />
       <Route path="/automation" element={<Automation />} />
